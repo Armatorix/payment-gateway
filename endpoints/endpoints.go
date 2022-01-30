@@ -13,6 +13,10 @@ func Healthcheck(c echo.Context) error {
 	return c.JSON(http.StatusOK, statusOK)
 }
 
+func Authenticate(c echo.Context) error {
+	return nil
+}
+
 func Authorize(c echo.Context) error {
 	return nil
 }

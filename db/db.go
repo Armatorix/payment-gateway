@@ -16,21 +16,17 @@ type TxContext struct {
 	TxCtx context.Context
 }
 
-func DBSerializableTxMiddleware(db *bun.DB) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			return db.RunInTx(
-				c.Request().Context(),
-				&sql.TxOptions{Isolation: sql.LevelSerializable},
-				func(ctx context.Context, tx bun.Tx) error {
-					return next(TxContext{c, tx, ctx})
-				})
-		}
-	}
+type DB struct {
+	*bun.DB
 }
 
-func Connect(dsn string) *bun.DB {
+func Connect(dsn string) *DB {
 	sqldb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 
-	return bun.NewDB(sqldb, pgdialect.New())
+	return &DB{bun.NewDB(sqldb, pgdialect.New())}
+}
+
+func (db *DB) VerifySecret(username, secret string) (bool, error) {
+	// TODO db.NewSelect().Model()
+	return true, nil
 }
