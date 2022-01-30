@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/Armatorix/payment-gateway/config"
+	"github.com/Armatorix/payment-gateway/db"
 	"github.com/Armatorix/payment-gateway/endpoints"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
@@ -22,7 +23,7 @@ func (cv *V) Validate(i interface{}) error {
 func main() {
 	cfg, err := config.FromEnv()
 	if err != nil {
-		log.Fatalf("failed env init: %v", err)
+		log.Fatal(err)
 	}
 
 	e := echo.New()
@@ -33,5 +34,11 @@ func main() {
 	e.Use(middleware.CORS())
 	e.GET("/public/health-check", endpoints.Healthcheck)
 
+	withTransaction := e.Group("", db.DBSerializableTxMiddleware(db.Connect(cfg.DB.DSN)))
+
+	withTransaction.POST("/authorize", endpoints.Authorize)
+	withTransaction.POST("/capture", endpoints.Capture)
+	withTransaction.POST("/void", endpoints.Void)
+	withTransaction.POST("/refund", endpoints.Refund)
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", cfg.Server.Port)).Error())
 }

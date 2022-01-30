@@ -7,21 +7,31 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-const DefaultPort = 8080
+const (
+	DefaultPort = 8080
+	LocalDSN    = "postgres://postgres:@localhost:5432/postgres?sslmode=disable"
+)
 
-type ServerConfig struct {
+type DB struct {
+	DSN string `env:"DB_DSN"`
+}
+type Server struct {
 	Port     int     `env:"PORT"`
 	LogLevel log.Lvl `env:"SERVER_LOG_LEVEL"`
 }
 
 type Config struct {
-	Server ServerConfig
+	Server Server
+	DB     DB
 }
 
 func New() *Config {
 	return &Config{
-		Server: ServerConfig{
+		Server: Server{
 			Port: DefaultPort,
+		},
+		DB: DB{
+			DSN: LocalDSN,
 		},
 	}
 }
