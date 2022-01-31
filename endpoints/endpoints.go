@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -37,6 +38,7 @@ func ErrorRespMiddleware(hf echo.HandlerFunc) echo.HandlerFunc {
 		if err == nil {
 			return nil
 		}
+		log.Println(err)
 		switch errMsg := strings.ToLower(err.Error()); {
 		case strings.Contains(errMsg, "unauthorized"):
 			return c.JSON(http.StatusUnauthorized,
@@ -61,7 +63,7 @@ func ErrorRespMiddleware(hf echo.HandlerFunc) echo.HandlerFunc {
 }
 
 type authorizeReq struct {
-	CardHolder string `json:"card_holder" validate:"required,alphanum"`
+	CardHolder string `json:"card_holder" validate:"required"`
 	CardNumber string `json:"card_number" validate:"required,luhn"`
 	Expiration struct {
 		Year  int64 `json:"year"`
