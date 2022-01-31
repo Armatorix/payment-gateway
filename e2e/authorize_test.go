@@ -11,7 +11,7 @@ import (
 
 var (
 	invalidLuhnCardNumber = pointerString("7312731273127312")
-	expiredCardDates      = &apiclient.AuthorizeRequestCardExpiry{ // expired
+	expiredCardDates      = &apiclient.AuthorizeRequestCardExpiration{
 		Month: pointerInt32(12),
 		Year:  pointerInt32(2021),
 	}
@@ -21,9 +21,9 @@ var (
 	okAuthorizationReq = apiclient.AuthorizeRequest{
 		CardNumber: pointerString("001230147647009683210024"),
 		CardHolder: pointerString("dummy holder"),
-		CardExpiry: &apiclient.AuthorizeRequestCardExpiry{
+		CardExpiration: &apiclient.AuthorizeRequestCardExpiration{
 			Month: pointerInt32(12),
-			Year:  pointerInt32(int32(time.Now().Year()) + 1),
+			Year:  pointerInt32(int32(time.Now().Year() + 1)),
 		},
 		CardCvv:  pointerInt32(123),
 		Amount:   pointerInt64(1273),
@@ -50,15 +50,16 @@ func testAuthorizeUnauthoriezed(t *testing.T) {
 	require.Error(t, err)
 	require.Equal(t, resp.StatusCode, http.StatusUnauthorized)
 }
+
 func testAuthorizeBadLuhn(t *testing.T) {
 	_, resp, err := api.AuthorizePost(authedCtx).
 		AuthorizeRequest(apiclient.AuthorizeRequest{
-			CardNumber: invalidLuhnCardNumber,
-			CardHolder: okAuthorizationReq.CardHolder,
-			CardExpiry: okAuthorizationReq.CardExpiry,
-			CardCvv:    okAuthorizationReq.CardCvv,
-			Amount:     okAuthorizationReq.Amount,
-			Currency:   okAuthorizationReq.Currency,
+			CardNumber:     invalidLuhnCardNumber,
+			CardHolder:     okAuthorizationReq.CardHolder,
+			CardExpiration: okAuthorizationReq.CardExpiration,
+			CardCvv:        okAuthorizationReq.CardCvv,
+			Amount:         okAuthorizationReq.Amount,
+			Currency:       okAuthorizationReq.Currency,
 		}).Execute()
 
 	if resp != nil && resp.Body != nil {
@@ -71,30 +72,30 @@ func testAuthorizeBadLuhn(t *testing.T) {
 func testAuthorizeExpiredCard(t *testing.T) {
 	_, resp, err := api.AuthorizePost(authedCtx).
 		AuthorizeRequest(apiclient.AuthorizeRequest{
-			CardNumber: okAuthorizationReq.CardNumber,
-			CardHolder: okAuthorizationReq.CardHolder,
-			CardExpiry: expiredCardDates,
-			CardCvv:    okAuthorizationReq.CardCvv,
-			Amount:     okAuthorizationReq.Amount,
-			Currency:   okAuthorizationReq.Currency,
+			CardNumber:     okAuthorizationReq.CardNumber,
+			CardHolder:     okAuthorizationReq.CardHolder,
+			CardExpiration: expiredCardDates,
+			CardCvv:        okAuthorizationReq.CardCvv,
+			Amount:         okAuthorizationReq.Amount,
+			Currency:       okAuthorizationReq.Currency,
 		}).Execute()
 
 	if resp != nil && resp.Body != nil {
 		defer resp.Body.Close()
 	}
 	require.Error(t, err)
-	require.Equal(t, resp.StatusCode, http.StatusBadRequest)
+	require.Equal(t, http.StatusBadRequest, resp.StatusCode)
 }
 
 func testAuthorizeTooShortCVV(t *testing.T) {
 	_, resp, err := api.AuthorizePost(authedCtx).
 		AuthorizeRequest(apiclient.AuthorizeRequest{
-			CardNumber: okAuthorizationReq.CardNumber,
-			CardHolder: okAuthorizationReq.CardHolder,
-			CardExpiry: okAuthorizationReq.CardExpiry,
-			CardCvv:    tooShortCVV,
-			Amount:     okAuthorizationReq.Amount,
-			Currency:   okAuthorizationReq.Currency,
+			CardNumber:     okAuthorizationReq.CardNumber,
+			CardHolder:     okAuthorizationReq.CardHolder,
+			CardExpiration: okAuthorizationReq.CardExpiration,
+			CardCvv:        tooShortCVV,
+			Amount:         okAuthorizationReq.Amount,
+			Currency:       okAuthorizationReq.Currency,
 		}).Execute()
 
 	if resp != nil && resp.Body != nil {
@@ -107,12 +108,12 @@ func testAuthorizeTooShortCVV(t *testing.T) {
 func testAuthorizeProper(t *testing.T) {
 	authorize, resp, err := api.AuthorizePost(authedCtx).
 		AuthorizeRequest(apiclient.AuthorizeRequest{
-			CardNumber: okAuthorizationReq.CardNumber,
-			CardHolder: okAuthorizationReq.CardHolder,
-			CardExpiry: okAuthorizationReq.CardExpiry,
-			CardCvv:    okAuthorizationReq.CardCvv,
-			Amount:     okAuthorizationReq.Amount,
-			Currency:   okAuthorizationReq.Currency,
+			CardNumber:     okAuthorizationReq.CardNumber,
+			CardHolder:     okAuthorizationReq.CardHolder,
+			CardExpiration: okAuthorizationReq.CardExpiration,
+			CardCvv:        okAuthorizationReq.CardCvv,
+			Amount:         okAuthorizationReq.Amount,
+			Currency:       okAuthorizationReq.Currency,
 		}).Execute()
 
 	if resp != nil && resp.Body != nil {
@@ -131,12 +132,12 @@ func testAuthorizeProper(t *testing.T) {
 func testAuthorizeZeroAmount(t *testing.T) {
 	_, resp, err := api.AuthorizePost(authedCtx).
 		AuthorizeRequest(apiclient.AuthorizeRequest{
-			CardNumber: okAuthorizationReq.CardNumber,
-			CardHolder: okAuthorizationReq.CardHolder,
-			CardExpiry: okAuthorizationReq.CardExpiry,
-			CardCvv:    okAuthorizationReq.CardCvv,
-			Amount:     zeroAmount,
-			Currency:   okAuthorizationReq.Currency,
+			CardNumber:     okAuthorizationReq.CardNumber,
+			CardHolder:     okAuthorizationReq.CardHolder,
+			CardExpiration: okAuthorizationReq.CardExpiration,
+			CardCvv:        okAuthorizationReq.CardCvv,
+			Amount:         zeroAmount,
+			Currency:       okAuthorizationReq.Currency,
 		}).Execute()
 
 	if resp != nil && resp.Body != nil {

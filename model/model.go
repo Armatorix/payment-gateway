@@ -17,13 +17,13 @@ type CreditCard struct {
 
 	ID          uuid.UUID
 	Holder      string
-	Number      string
+	CardNumber  string
 	CVV         int32
 	ExpiryMonth int64
 	ExpiryYear  int64
 	Amount      int64
 	Currency    string
-	State       State
+	CardState   State
 }
 
 type Merchant struct {

@@ -16,10 +16,10 @@ import (
 
 // AuthorizeRequest struct for AuthorizeRequest
 type AuthorizeRequest struct {
-	CardNumber *string                     `json:"card_number,omitempty"`
-	CardHolder *string                     `json:"card_holder,omitempty"`
-	CardExpiry *AuthorizeRequestCardExpiry `json:"card_expiry,omitempty"`
-	CardCvv    *int32                      `json:"card_cvv,omitempty"`
+	CardNumber     *string                         `json:"card_number,omitempty"`
+	CardHolder     *string                         `json:"card_holder,omitempty"`
+	CardExpiration *AuthorizeRequestCardExpiration `json:"card_expiration,omitempty"`
+	CardCvv        *int32                          `json:"card_cvv,omitempty"`
 	// Amount of money in a form of least significant monetary unit.
 	Amount   *int64  `json:"amount,omitempty"`
 	Currency *string `json:"currency,omitempty"`
@@ -106,36 +106,36 @@ func (o *AuthorizeRequest) SetCardHolder(v string) {
 	o.CardHolder = &v
 }
 
-// GetCardExpiry returns the CardExpiry field value if set, zero value otherwise.
-func (o *AuthorizeRequest) GetCardExpiry() AuthorizeRequestCardExpiry {
-	if o == nil || o.CardExpiry == nil {
-		var ret AuthorizeRequestCardExpiry
+// GetCardExpiration returns the CardExpiration field value if set, zero value otherwise.
+func (o *AuthorizeRequest) GetCardExpiration() AuthorizeRequestCardExpiration {
+	if o == nil || o.CardExpiration == nil {
+		var ret AuthorizeRequestCardExpiration
 		return ret
 	}
-	return *o.CardExpiry
+	return *o.CardExpiration
 }
 
-// GetCardExpiryOk returns a tuple with the CardExpiry field value if set, nil otherwise
+// GetCardExpirationOk returns a tuple with the CardExpiration field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AuthorizeRequest) GetCardExpiryOk() (*AuthorizeRequestCardExpiry, bool) {
-	if o == nil || o.CardExpiry == nil {
+func (o *AuthorizeRequest) GetCardExpirationOk() (*AuthorizeRequestCardExpiration, bool) {
+	if o == nil || o.CardExpiration == nil {
 		return nil, false
 	}
-	return o.CardExpiry, true
+	return o.CardExpiration, true
 }
 
-// HasCardExpiry returns a boolean if a field has been set.
-func (o *AuthorizeRequest) HasCardExpiry() bool {
-	if o != nil && o.CardExpiry != nil {
+// HasCardExpiration returns a boolean if a field has been set.
+func (o *AuthorizeRequest) HasCardExpiration() bool {
+	if o != nil && o.CardExpiration != nil {
 		return true
 	}
 
 	return false
 }
 
-// SetCardExpiry gets a reference to the given AuthorizeRequestCardExpiry and assigns it to the CardExpiry field.
-func (o *AuthorizeRequest) SetCardExpiry(v AuthorizeRequestCardExpiry) {
-	o.CardExpiry = &v
+// SetCardExpiration gets a reference to the given AuthorizeRequestCardExpiration and assigns it to the CardExpiration field.
+func (o *AuthorizeRequest) SetCardExpiration(v AuthorizeRequestCardExpiration) {
+	o.CardExpiration = &v
 }
 
 // GetCardCvv returns the CardCvv field value if set, zero value otherwise.
@@ -242,8 +242,8 @@ func (o AuthorizeRequest) MarshalJSON() ([]byte, error) {
 	if o.CardHolder != nil {
 		toSerialize["card_holder"] = o.CardHolder
 	}
-	if o.CardExpiry != nil {
-		toSerialize["card_expiry"] = o.CardExpiry
+	if o.CardExpiration != nil {
+		toSerialize["card_expiration"] = o.CardExpiration
 	}
 	if o.CardCvv != nil {
 		toSerialize["card_cvv"] = o.CardCvv

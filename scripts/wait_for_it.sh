@@ -2,7 +2,7 @@
 
 for i in {1..5}
 do
-   nc -z localhost 8080
+   curl http://localhost:8080/public/health-check
    if [ $? == 0 ]
    then
       echo "Connection ready"

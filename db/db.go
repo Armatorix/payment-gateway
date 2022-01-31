@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"github.com/Armatorix/payment-gateway/model"
+	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
@@ -21,24 +22,28 @@ func Connect(dsn string) *DB {
 	return &DB{bun.NewDB(sqldb, pgdialect.New())}
 }
 
-func (db *DB) VerifySecret(ctx context.Context, username, secret string) (bool, error) {
+func (db *DB) VerifySecret(ctx context.Context, username, secret string) (bool, uuid.UUID, error) {
 	m := model.Merchant{}
 	err := db.NewSelect().
 		Model(&m).
 		Where("name = ?", username).
 		Where("api_secret = ?", secret).
-		Scan(ctx)
+		Scan(ctx, &m)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return false, nil
+			return false, uuid.Nil, nil
 		}
-		return false, err
+		return false, uuid.Nil, err
 	}
-	return true, nil
+	return true, m.ID, nil
 }
 
-func (db *DB) SaveCreditCard(c model.CreditCard) (*model.CreditCard, error) {
-	c.State = model.ActiveState
-	// TODO
-	return &model.CreditCard{}, nil
+func (db *DB) SaveCreditCard(ctx context.Context, c model.CreditCard) (*model.CreditCard, error) {
+	c.CardState = model.ActiveState
+	_, err := db.NewInsert().
+		Model(&c).Exec(ctx, &c)
+	if err != nil {
+		return nil, err
+	}
+	return &c, nil
 }

@@ -4,6 +4,7 @@
 * verify luhn algorithm library
 * add all endpoints to api spec, update api client, provide more e2e tests
 * finish rest of the endpoints
+* unit tests
 * define curreny format and add validation (ISO 4217 probably)
 
 # NTH:

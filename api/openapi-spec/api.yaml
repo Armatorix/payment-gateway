@@ -43,7 +43,7 @@ components:
           type: string
         card_holder:
           type: string
-        card_expiry:
+        card_expiration:
           type: object
           properties:
             month:

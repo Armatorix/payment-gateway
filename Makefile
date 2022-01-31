@@ -40,7 +40,7 @@ format:
 
 .PHONY: run
 run:
-	docker-compose up --build -d --always-recreate-deps --renew-anon-volumes
+	docker-compose up --build -d --always-recreate-deps --renew-anon-volumes --force-recreate
 	bash ./scripts/wait_for_it.sh
 .PHONY: stop
 stop:

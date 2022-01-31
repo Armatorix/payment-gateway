@@ -6,7 +6,9 @@ import (
 	"strings"
 
 	"github.com/Armatorix/payment-gateway/db"
+	"github.com/Armatorix/payment-gateway/db/middleware"
 	"github.com/Armatorix/payment-gateway/model"
+	"github.com/Armatorix/payment-gateway/x/xtime"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
@@ -63,22 +65,19 @@ func ErrorRespMiddleware(hf echo.HandlerFunc) echo.HandlerFunc {
 }
 
 type authorizeReq struct {
-	CardHolder string `json:"card_holder" validate:"required"`
-	CardNumber string `json:"card_number" validate:"required,luhn"`
-	Expiration struct {
-		Year  int64 `json:"year"`
-		Month int64 `json:"month"`
-	} `json:"card_expiration" validate:"required,not_expired"`
-	CVV      int32  `json:"card_cvv" validate:"required,gte=100,lte=999"`
-	Amount   int64  `json:"amount" validate:"required,gte=1"`
-	Currency string `json:"currency" validate:"required"`
+	CardHolder string          `json:"card_holder" validate:"required"`
+	CardNumber string          `json:"card_number" validate:"required,luhn"`
+	Expiration xtime.MonthYear `json:"card_expiration" validate:"required"`
+	CVV        int32           `json:"card_cvv" validate:"required,gte=100,lte=999"`
+	Amount     int64           `json:"amount" validate:"required,gte=1"`
+	Currency   string          `json:"currency" validate:"required"`
 }
 
 type authorizeResp struct {
-	AuthorizationID uuid.UUID
-	Status          string
-	AmountAvailable int64
-	Currency        string
+	AuthorizationID uuid.UUID `json:"authorization_id"`
+	Status          string    `json:"status"`
+	AmountAvailable int64     `json:"amount_available"`
+	Currency        string    `json:"currency"`
 }
 
 func (h *Handler) Authorize(c echo.Context) error {
@@ -90,10 +89,14 @@ func (h *Handler) Authorize(c echo.Context) error {
 	if err := c.Validate(&req); err != nil {
 		return err
 	}
-	creditCard, err := h.DB.SaveCreditCard(model.CreditCard{
+
+	merchantID := c.Get(middleware.MerchantIDKey).(uuid.UUID)
+
+	creditCard, err := h.DB.SaveCreditCard(c.Request().Context(), model.CreditCard{
+		MerchantID:  merchantID,
 		ExpiryMonth: req.Expiration.Month,
 		ExpiryYear:  req.Expiration.Year,
-		Number:      req.CardNumber,
+		CardNumber:  req.CardNumber,
 		Holder:      req.CardHolder,
 		CVV:         req.CVV,
 		Amount:      req.Amount,
@@ -102,6 +105,7 @@ func (h *Handler) Authorize(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	log.Println(creditCard)
 	return c.JSON(http.StatusOK, authorizeResp{
 		AuthorizationID: creditCard.ID,
 		Status:          respSuccess,
