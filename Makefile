@@ -51,3 +51,7 @@ test-e2e:
 	$(MAKE) run
 	go test --count=1 ./e2e
 	$(MAKE) stop
+
+.PHONY: lint
+lint:
+	golangci-lint run ./...
