@@ -18,7 +18,7 @@ type CreditCard struct {
 	ID          uuid.UUID
 	Holder      string
 	Number      string
-	CVV         int64
+	CVV         int32
 	ExpiryMonth int64
 	ExpiryYear  int64
 	Amount      int64

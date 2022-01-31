@@ -51,9 +51,10 @@ components:
             year:
               type: integer
         card_cvv:
-          type: number
+          type: integer
+          format: int32
         amount:
-          type: number
+          $ref: "#/components/schemas/Amount"
         currency:
           type: string
     AuthorizeResponse:
@@ -70,8 +71,8 @@ components:
           type: string
           enum:
             - success
-    amount:
-      type: number
+    Amount:
+      type: integer
       format: int64
       description: Amount of money in a form of least significant monetary unit.
 security:

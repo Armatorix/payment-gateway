@@ -17,7 +17,7 @@ model-generate:
 
 .PHONY: model-remove
 model-remove:
-	-rm -rf pkg/model
+	-rm -rf ${GENERATE_PATH}
 
 .PHONY: model-clean
 model-clean:
