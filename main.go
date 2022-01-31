@@ -9,6 +9,7 @@ import (
 	dbmiddleware "github.com/Armatorix/payment-gateway/db/middleware"
 	"github.com/Armatorix/payment-gateway/endpoints"
 	"github.com/Armatorix/payment-gateway/validator"
+	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -20,6 +21,7 @@ func main() {
 	}
 
 	e := echo.New()
+	prometheus.NewPrometheus("payment-gateway", nil).Use(e)
 	e.Use(middleware.Logger())
 	e.Logger.SetLevel(cfg.Server.LogLevel)
 
