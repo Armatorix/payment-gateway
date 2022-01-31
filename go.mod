@@ -12,10 +12,13 @@ require (
 	github.com/uptrace/bun/driver/pgdriver v1.0.22
 )
 
+require github.com/jancajthaml-go/luhn v0.0.0-20210218075143-cd6d78542cc4 // indirect
+
 require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/google/uuid v1.3.0
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.11 // indirect
