@@ -10,7 +10,7 @@ import (
 
 const (
 	respSuccess = "success"
-	respFailed  = "failed"
+	respFailed  = "failure"
 )
 
 var statusOK = map[string]string{"status": "ok"}
@@ -28,9 +28,34 @@ type errorResp struct {
 	Status  string
 	Message string
 }
+
+func ErrorRespMiddleware() echo.MiddlewareFunc {
+	return func(hf echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			err := hf(c)
+			if err == nil {
+				return nil
+			}
+			switch {
+			// TODO: define all specific cases with messages
+			default:
+				return c.JSON(http.StatusInternalServerError,
+					errorResp{
+						Status:  respFailed,
+						Message: "unexpected error",
+					})
+			}
+		}
+	}
+}
+
 type authorizeReq struct {
 	CreditCardData string `json:"card_data" validate:"required,alphanum"`
 	CardNumber     int64  `json:"card_number" validate:"required,luhn"`
+	Expiration     struct {
+		Year  int64 `json:"year"`
+		Month int64 `json:"month"`
+	} `json:"card_expiration" validate:"required,not_expired"`
 }
 type authorizeResp struct {
 	AuthorizationID uuid.UUID

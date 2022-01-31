@@ -26,5 +26,5 @@ func (db *DB) VerifySecret(username, secret string) (bool, error) {
 
 func (db *DB) SaveCreditCard() (*model.CreditCard, error) {
 	// TODO
-	return nil, nil
+	return &model.CreditCard{}, nil
 }
