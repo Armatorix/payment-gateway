@@ -38,6 +38,16 @@ model-clean:
 format:
 	gofumpt -w ./..
 
-.PHONY: compose
-compose:
-	docker-compose up --force-recreate -V
+.PHONY: run
+run:
+	docker-compose up --build -d --always-recreate-deps --renew-anon-volumes
+	bash ./scripts/wait_for_it.sh
+.PHONY: stop
+stop:
+	docker-compose down
+
+.PHONY: test-e2e
+test-e2e: 
+	$(MAKE) run
+	go test --count=1 ./e2e
+	$(MAKE) stop
