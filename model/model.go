@@ -14,7 +14,7 @@ const (
 
 type CreditCard struct {
 	ID          uuid.UUID
-	Data        string
+	Holder      string
 	Number      string
 	CVV         int64
 	ExpiryMonth int64

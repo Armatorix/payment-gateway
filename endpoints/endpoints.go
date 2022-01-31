@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Armatorix/payment-gateway/db"
+	"github.com/Armatorix/payment-gateway/model"
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
@@ -50,12 +51,13 @@ func ErrorRespMiddleware() echo.MiddlewareFunc {
 }
 
 type authorizeReq struct {
-	CreditCardData string `json:"card_data" validate:"required,alphanum"`
-	CardNumber     int64  `json:"card_number" validate:"required,luhn"`
-	Expiration     struct {
+	CardHolder string `json:"card_holder" validate:"required,alphanum"`
+	CardNumber string `json:"card_number" validate:"required,luhn"`
+	Expiration struct {
 		Year  int64 `json:"year"`
 		Month int64 `json:"month"`
 	} `json:"card_expiration" validate:"required,not_expired"`
+	CVV int64 `json:"card_cvv" validate:"required,gte=100,lte=999"`
 }
 type authorizeResp struct {
 	AuthorizationID uuid.UUID
@@ -73,7 +75,13 @@ func (h *Handler) Authorize(c echo.Context) error {
 	if err := c.Validate(&req); err != nil {
 		return err
 	}
-	creditCard, err := h.DB.SaveCreditCard()
+	creditCard, err := h.DB.SaveCreditCard(model.CreditCard{
+		ExpiryMonth: req.Expiration.Month,
+		ExpiryYear:  req.Expiration.Year,
+		Number:      req.CardNumber,
+		Holder:      req.CardHolder,
+		CVV:         req.CVV,
+	})
 	if err != nil {
 		return err
 	}
@@ -86,12 +94,15 @@ func (h *Handler) Authorize(c echo.Context) error {
 }
 
 func (h *Handler) Capture(c echo.Context) error {
+	// TODO
 	return nil
 }
 func (h *Handler) Void(c echo.Context) error {
+	// TODO
 	return nil
 }
 
 func (h *Handler) Refund(c echo.Context) error {
+	// TODO
 	return nil
 }
