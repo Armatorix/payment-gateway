@@ -15,6 +15,7 @@ const (
 type DB struct {
 	DSN string `env:"DB_DSN"`
 }
+
 type Server struct {
 	Port     int     `env:"PORT"`
 	LogLevel log.Lvl `env:"SERVER_LOG_LEVEL"`

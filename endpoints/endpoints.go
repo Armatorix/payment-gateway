@@ -57,8 +57,11 @@ type authorizeReq struct {
 		Year  int64 `json:"year"`
 		Month int64 `json:"month"`
 	} `json:"card_expiration" validate:"required,not_expired"`
-	CVV int64 `json:"card_cvv" validate:"required,gte=100,lte=999"`
+	CVV      int64  `json:"card_cvv" validate:"required,gte=100,lte=999"`
+	Amount   int64  `json:"amount" validate:"required,gte=1"`
+	Currency string `json:"currency" validate:"required"`
 }
+
 type authorizeResp struct {
 	AuthorizationID uuid.UUID
 	Status          string
@@ -81,6 +84,8 @@ func (h *Handler) Authorize(c echo.Context) error {
 		Number:      req.CardNumber,
 		Holder:      req.CardHolder,
 		CVV:         req.CVV,
+		Amount:      req.Amount,
+		Currency:    req.Currency,
 	})
 	if err != nil {
 		return err
@@ -97,6 +102,7 @@ func (h *Handler) Capture(c echo.Context) error {
 	// TODO
 	return nil
 }
+
 func (h *Handler) Void(c echo.Context) error {
 	// TODO
 	return nil
