@@ -15,6 +15,7 @@
 * Containerization
 * E2E tests
 * Whole structure for more craftwork
+* Swagger container for manual testing
 
 ## TODO
 
