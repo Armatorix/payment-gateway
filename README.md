@@ -2,8 +2,8 @@
 
 ## NOTES
 
-* codes for specific error triggers are not good one, as first one is Luhn correct, but second and third are not.
-* did not finished all endpoints as it requires quiet a lot more craft work - main concept and repo structure is here (except unit tests).
+* codes for specific error triggers are not a good one, as the first one is Luhn correct, but the second and third are not.
+* did not finish all endpoints as it requires quite a lot more craftwork - main concept and repo structure are here (except unit tests).
 
 ## DONE
 
@@ -12,25 +12,25 @@
 * Pipeline for linter, build, tests
 * Request fields validation
 * Prometheus metrics
-* Contenerization
+* Containerization
 * E2E tests
-* Whole structure for more craft work
+* Whole structure for more craftwork
 
 ## TODO
 
-* verify luhn algorithm library
+* verify Luhn algorithm library
 * add all endpoints to api spec, update api client, provide more e2e tests
 * finish rest of the endpoints
 * unit tests
-* define curreny format and add validation (ISO 4217 probably)
+* define currency format and add validation (ISO 4217 probably)
 
 ## NTH
 
 * Cache for docker image building
 * docker image with filesystem tracking for development - [air autoreload](https://github.com/cosmtrek/air)
 * pipeline for e2e tests
-* postgres migration scripts
-* System for api key/secret registration for marchants.
+* Postgres migration scripts
+* System for api key/secret registration for merchants.
 
 ## Scaling
 
