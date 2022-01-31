@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: go build -v ./...
   test:
-    name: build
+    name: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
