@@ -17,8 +17,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
+    restart: always
     environment:
-      - DB_DSN=postgres://postgres:@localhost:5432/postgres?sslmode=disable
+      - DB_DSN=postgres://postgres:password@postgres:5432/payment-gateway?sslmode=disable
     ports:
       - "8080:8080"
     depends_on:
