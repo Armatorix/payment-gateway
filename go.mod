@@ -12,7 +12,13 @@ require (
 	github.com/uptrace/bun/driver/pgdriver v1.0.22
 )
 
-require github.com/jancajthaml-go/luhn v0.0.0-20210218075143-cd6d78542cc4 // indirect
+require (
+	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/jancajthaml-go/luhn v0.0.0-20210218075143-cd6d78542cc4 // indirect
+	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
+	google.golang.org/appengine v1.6.6 // indirect
+	google.golang.org/protobuf v1.25.0 // indirect
+)
 
 require (
 	github.com/go-playground/locales v0.14.0 // indirect

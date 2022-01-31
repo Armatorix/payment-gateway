@@ -1,0 +1,78 @@
+openapi: 3.0.0
+servers:
+  - url: "http://localhost:8080"
+
+info:
+  title: Payment Gateway API
+  description: Payment gateway API for merchants usage.
+  version: 0.0.1
+paths:
+  "/public/health-check":
+    get:
+      description: Verifies if service is healthy.
+      responses:
+        200:
+          description: healthy service
+  "/authorize":
+    post:
+      description: Authorizes usage of card for merchant.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorizeRequest"
+      responses:
+        200:
+          description: "Merchant grants access for credit card for successfully."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorizeResponse"
+
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    AuthorizeRequest:
+      type: object
+      properties:
+        card_number:
+          type: string
+        card_holder:
+          type: string
+        card_expiry:
+          type: object
+          properties:
+            month:
+              type: integer
+            year:
+              type: integer
+        card_cvv:
+          type: number
+        amount:
+          type: number
+        currency:
+          type: string
+    AuthorizeResponse:
+      type: object
+      properties:
+        authorization_id:
+          type: string
+          format: uuid
+        amount_available:
+          $ref: "#/components/schemas/Amount"
+        currency:
+          type: string
+        status:
+          type: string
+          enum:
+            - success
+    amount:
+      type: number
+      format: int64
+      description: Amount of money in a form of least significant monetary unit.
+security:
+  - basicAuth: []
