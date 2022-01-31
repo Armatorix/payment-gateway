@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
 
 	"github.com/Armatorix/payment-gateway/model"
 	"github.com/uptrace/bun"
@@ -29,7 +28,6 @@ func (db *DB) VerifySecret(ctx context.Context, username, secret string) (bool, 
 		Where("name = ?", username).
 		Where("api_secret = ?", secret).
 		Scan(ctx)
-	log.Println(err, m)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return false, nil
