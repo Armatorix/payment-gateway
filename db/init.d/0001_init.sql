@@ -7,7 +7,6 @@ CREATE TABLE merchants
   api_secret VARCHAR NOT NULL
 );
 
-CREATE TYPE CARD_STATE AS ENUM('active', 'voided', 'refunded');
 
 CREATE TABLE credit_cards
 (
@@ -19,7 +18,6 @@ CREATE TABLE credit_cards
   expiry_year integer NOT NULL,
   amount integer NOT NULL,
   currency VARCHAR,
-  card_state CARD_STATE,
 
   merchant_id UUID,
   CONSTRAINT fk_merchant
@@ -27,3 +25,17 @@ CREATE TABLE credit_cards
       REFERENCES merchants(id)
 );
 
+CREATE TYPE CARD_ACTION AS ENUM('capture', 'refund', 'void');
+
+
+CREATE TABLE card_actions
+(
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
+  action_type CARD_ACTION,
+  amount integer NOT NULL,
+
+  card_id UUID,
+  CONSTRAINT fk_card
+    FOREIGN KEY(card_id)
+      REFERENCES credit_cards(id)
+);

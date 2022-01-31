@@ -28,5 +28,4 @@ func TestAPI(t *testing.T) {
 		t.Skip("Skipping e2e tests in short mode")
 	}
 	t.Run("authorize", testAuthorize)
-	// TODO other endpoints
 }

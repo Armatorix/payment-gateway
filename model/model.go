@@ -2,14 +2,12 @@ package model
 
 import "github.com/google/uuid"
 
-// TODO models
-// type  struct
-
-type State string
+type ActionType string
 
 const (
-	ActiveState = State("active")
-	VoidedState = State("voided")
+	ActiveAT   = ActionType("active")
+	VoidedAT   = ActionType("voided")
+	RefundedAT = ActionType("refunded")
 )
 
 type CreditCard struct {
@@ -23,11 +21,19 @@ type CreditCard struct {
 	ExpiryYear  int64
 	Amount      int64
 	Currency    string
-	CardState   State
 }
 
 type Merchant struct {
-	ID        uuid.UUID
+	ID uuid.UUID
+
 	Name      string
 	APISecret string
+}
+
+type CardAction struct {
+	CardID uuid.UUID
+
+	ID         uuid.UUID
+	ActionType ActionType
+	Amount     int64
 }

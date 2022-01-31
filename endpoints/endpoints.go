@@ -115,16 +115,13 @@ func (h *Handler) Authorize(c echo.Context) error {
 }
 
 func (h *Handler) Capture(c echo.Context) error {
-	// TODO
-	return nil
+	return c.NoContent(http.StatusNotImplemented)
 }
 
 func (h *Handler) Void(c echo.Context) error {
-	// TODO
-	return nil
+	return c.NoContent(http.StatusNotImplemented)
 }
 
 func (h *Handler) Refund(c echo.Context) error {
-	// TODO
-	return nil
+	return c.NoContent(http.StatusNotImplemented)
 }
