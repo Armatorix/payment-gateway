@@ -11,6 +11,7 @@
 * Cache for docker image building
 * postgres migration scripts
 * docker image with filesystem tracking for development (https://github.com/cosmtrek/air)
+* pipeline e2e
 
 # Scaling
 . Verify if [redis lock](https://github.com/bsm/redislock) works faster than pg serializable isolation level.
