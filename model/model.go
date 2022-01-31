@@ -13,6 +13,8 @@ const (
 )
 
 type CreditCard struct {
+	MerchantID uuid.UUID
+
 	ID          uuid.UUID
 	Holder      string
 	Number      string
@@ -22,4 +24,10 @@ type CreditCard struct {
 	Amount      int64
 	Currency    string
 	State       State
+}
+
+type Merchant struct {
+	ID        uuid.UUID
+	Name      string
+	APISecret string
 }
