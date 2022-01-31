@@ -13,7 +13,7 @@ model-generate:
 			-i /local/${OPENAPI_PATH} \
 			-g go \
 			-o /local/${GENERATE_PATH} \
-			--package-name model
+			--package-name apiclient
 
 .PHONY: model-remove
 model-remove:

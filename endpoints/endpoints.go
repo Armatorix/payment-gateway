@@ -57,7 +57,6 @@ func ErrorRespMiddleware(hf echo.HandlerFunc) echo.HandlerFunc {
 					Message: "unexpected error",
 				})
 		}
-
 	}
 }
 
