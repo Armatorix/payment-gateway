@@ -9,7 +9,7 @@ import (
 
 const (
 	DefaultPort = 8080
-	LocalDSN    = "postgres://postgres:@localhost:5432/postgres?sslmode=disable"
+	LocalDSN    = "postgres://postgres:password@localhost:5432/payment-gateway?sslmode=disable"
 )
 
 type DB struct {

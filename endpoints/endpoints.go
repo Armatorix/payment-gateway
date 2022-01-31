@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/Armatorix/payment-gateway/db"
 	"github.com/Armatorix/payment-gateway/model"
@@ -30,23 +31,33 @@ type errorResp struct {
 	Message string
 }
 
-func ErrorRespMiddleware() echo.MiddlewareFunc {
-	return func(hf echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			err := hf(c)
-			if err == nil {
-				return nil
-			}
-			switch {
-			// TODO: define all specific cases with messages
-			default:
-				return c.JSON(http.StatusInternalServerError,
-					errorResp{
-						Status:  respFailed,
-						Message: "unexpected error",
-					})
-			}
+func ErrorRespMiddleware(hf echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		err := hf(c)
+		if err == nil {
+			return nil
 		}
+		switch errMsg := strings.ToLower(err.Error()); {
+		case strings.Contains(errMsg, "unauthorized"):
+			return c.JSON(http.StatusUnauthorized,
+				errorResp{
+					Status:  respFailed,
+					Message: "basic auth failed",
+				})
+		case strings.Contains(errMsg, "field validation"):
+			return c.JSON(http.StatusBadRequest,
+				errorResp{
+					Status:  respFailed,
+					Message: "fields with improper values",
+				})
+		default:
+			return c.JSON(http.StatusInternalServerError,
+				errorResp{
+					Status:  respFailed,
+					Message: "unexpected error",
+				})
+		}
+
 	}
 }
 

@@ -37,3 +37,7 @@ model-clean:
 .PHONY: formatter
 format:
 	gofumpt -w ./..
+
+.PHONY: compose
+compose:
+	docker-compose up --force-recreate -V

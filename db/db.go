@@ -1,7 +1,10 @@
 package db
 
 import (
+	"context"
 	"database/sql"
+	"errors"
+	"log"
 
 	"github.com/Armatorix/payment-gateway/model"
 	"github.com/uptrace/bun"
@@ -19,8 +22,20 @@ func Connect(dsn string) *DB {
 	return &DB{bun.NewDB(sqldb, pgdialect.New())}
 }
 
-func (db *DB) VerifySecret(username, secret string) (bool, error) {
-	// TODO db.NewSelect().Model()
+func (db *DB) VerifySecret(ctx context.Context, username, secret string) (bool, error) {
+	m := model.Merchant{}
+	err := db.NewSelect().
+		Model(&m).
+		Where("name = ?", username).
+		Where("api_secret = ?", secret).
+		Scan(ctx)
+	log.Println(err, m)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, err
+	}
 	return true, nil
 }
 

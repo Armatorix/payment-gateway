@@ -27,9 +27,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	e.Use(middleware.CORS())
+	e.Use(endpoints.ErrorRespMiddleware,
+		middleware.CORS())
 	e.GET("/public/health-check", endpoints.Healthcheck)
+
 	sqlDB := db.Connect(cfg.DB.DSN)
+	if err = sqlDB.Ping(); err != nil {
+		log.Fatal(err)
+	}
+
 	authed := e.Group("", dbmiddleware.AuthMiddleware(sqlDB))
 
 	h := &endpoints.Handler{DB: sqlDB}

@@ -8,6 +8,6 @@ import (
 
 func AuthMiddleware(sqlDB *db.DB) echo.MiddlewareFunc {
 	return middleware.BasicAuth(func(username, secret string, c echo.Context) (bool, error) {
-		return sqlDB.VerifySecret(username, secret)
+		return sqlDB.VerifySecret(c.Request().Context(), username, secret)
 	})
 }
